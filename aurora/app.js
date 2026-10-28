@@ -183,7 +183,7 @@
     size('windows-latest', 'Aurora.exe', 'size-windows');
     size('ios-latest', 'Aurora.ipa', 'size-ios');
     const newest = Object.keys(ROLLING).map((t) => byTag[t] && byTag[t].published_at).filter(Boolean).sort().pop();
-    if (newest) $('build-info').textContent = `Free · open source · newest build ${ago(newest)}`;
+    if (newest) $('build-info').textContent = `Free · newest build ${ago(newest)}`;
 
     // desktop installers come from the newest versioned release (v1.2.3), not the rolling ones
     // the newest one that has its installers already (a release being built has none yet)
