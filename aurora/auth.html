@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Aurora · finishing sign-in</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#0d0e0f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f5fa" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="icon.png">
+  <!--
+    The return address for Google sign-in.
+
+    Supabase sends the browser here with ?code=…; this page turns that into an aurora:// link, which
+    is the only way a normal browser can hand a sign-in back to a desktop or phone app. Nothing is
+    stored and nothing is sent anywhere: the code is exchanged by the app itself, and only with the
+    PKCE verifier it generated before the browser ever opened.
+
+    Setup, once:
+      1. Supabase → Authentication → URL Configuration → Redirect URLs:
+           https://bannedvariable.github.io/aurora/auth.html
+      2. Google Cloud → Credentials → your OAuth client → Authorized redirect URIs:
+           https://bxmeboourjndlxkbqaic.supabase.co/auth/v1/callback
+      3. Keep this file at site/auth.html so GitHub Pages serves it at the URL above.
+  -->
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f5fa;
+      --card: #ffffff;
+      --fg: #16151a;
+      --muted: #5d5b66;
+      --line: rgba(22, 21, 26, 0.10);
+      --primary: #6b4dfb;
+      --on-primary: #ffffff;
+      --glow: rgba(107, 77, 251, 0.19);
+      --shadow: 0 24px 60px rgba(30, 25, 60, 0.12);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Helvetica Neue", system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d0e0f;
+        --card: #17181b;
+        --fg: #f2f0f7;
+        --muted: #a5a2af;
+        --line: rgba(255, 255, 255, 0.11);
+        --primary: #d0bcff;
+        --on-primary: #22163d;
+        --glow: rgba(208, 188, 255, 0.16);
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 28px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+      background:
+        radial-gradient(60% 44% at 50% -8%, var(--glow), transparent 70%),
+        var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em;
+    }
+    .wrap { width: min(396px, 100%); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 24px 2px;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    .brand svg { width: 24px; height: 24px; fill: var(--primary); }
+    .card {
+      padding: 30px 26px 26px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .badge {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--primary) 16%, transparent);
+      color: var(--primary);
+    }
+    .badge svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .badge .spin { animation: spin 900ms linear infinite; transform-origin: 50% 50%; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 23px;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    p + p { margin-top: 10px; }
+    .error-text {
+      margin: 14px 0 0;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--fg) 4%, transparent);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+      text-align: left;
+    }
+    .action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 50px;
+      margin-top: 22px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+    .action:hover { opacity: 0.92; }
+    .action:active { transform: scale(0.985); }
+    .action:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+    .hint {
+      margin: 16px 0 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+      text-align: center;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true"><path d="M500,160Q543.2,476.8 860,520Q543.2,563.2 500,880Q456.8,563.2 140,520Q456.8,476.8 500,160Z"/><path d="M780,154Q791.5,238.5 876,250Q791.5,261.5 780,346Q768.5,261.5 684,250Q768.5,238.5 780,154Z"/></svg>
+      <span>Aurora</span>
+    </div>
+
+    <section class="card" aria-live="polite">
+      <div class="badge" id="badge"></div>
+      <h1 id="title">Finishing sign-in</h1>
+      <p id="body">Taking you back to Aurora…</p>
+      <p class="error-text hidden" id="detail"></p>
+      <a class="action hidden" id="open" href="aurora://">Open Aurora</a>
+      <p class="hint hidden" id="hint">Aurora didn’t open on its own. Use the button above, then you can close this tab.</p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var hash = new URLSearchParams(location.hash.replace(/^#/, ''));
+      var code = params.get('code') || hash.get('code') || '';
+      var error = params.get('error_description') || hash.get('error_description') ||
+        params.get('error') || hash.get('error') || '';
+
+      var badge = document.getElementById('badge');
+      var title = document.getElementById('title');
+      var body = document.getElementById('body');
+      var detail = document.getElementById('detail');
+      var open = document.getElementById('open');
+      var hint = document.getElementById('hint');
+
+      var SPINNER = '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="spin" d="M12 3a9 9 0 1 0 9 9" /></svg>';
+      var CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+      var ALERT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5"/><path d="M12 16.5v.01"/><path d="M10.3 3.9 2.4 17.4A2 2 0 0 0 4.1 20.4h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>';
+
+      function handoffLink() {
+        var q = new URLSearchParams();
+        if (code) q.set('code', code);
+        if (error) q.set('error', error);
+        return 'aurora://auth?' + q.toString();
+      }
+
+      // nothing to hand over: this page was opened by hand
+      if (!code && !error) {
+        badge.innerHTML = CHECK;
+        title.textContent = 'This is Aurora’s sign-in page';
+        body.textContent = 'Google sends you here after you choose it in the app. Start the sign-in from Aurora and this page will bring you straight back.';
+        open.href = 'aurora://';
+        open.textContent = 'Open Aurora';
+        open.classList.remove('hidden');
+        hint.classList.add('hidden');
+        return;
+      }
+
+      if (error) {
+        badge.innerHTML = ALERT;
+        title.textContent = 'Sign-in didn’t finish';
+        body.textContent = 'Aurora didn’t get an account from Google. Close this tab and try again from the app.';
+        detail.textContent = error;
+        detail.classList.remove('hidden');
+        open.href = 'aurora://';
+        open.textContent = 'Back to Aurora';
+        open.classList.remove('hidden');
+        return;
+      }
+
+      // the code is here: try to hand it to the app, and leave the button in case the browser
+      // blocks the automatic jump (Safari in particular needs the tap)
+      badge.innerHTML = SPINNER;
+      title.textContent = 'Returning to Aurora';
+      body.textContent = 'This only takes a second.';
+      open.href = handoffLink();
+      open.textContent = 'Open Aurora';
+      try { location.replace(handoffLink()); } catch (e) { /* the button below is the fallback */ }
+      setTimeout(function () {
+        open.classList.remove('hidden');
+        hint.classList.remove('hidden');
+        body.textContent = 'Your sign-in is ready in the app.';
+      }, 1400);
+    })();
+  </script>
+</body>
+</html>
