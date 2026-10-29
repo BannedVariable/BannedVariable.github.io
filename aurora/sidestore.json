@@ -17,15 +17,15 @@
         {
           "version": "1.0.0",
           "buildVersion": "0",
-          "date": "2026-10-29T08:57:00.475Z",
-          "size": 11912472,
+          "date": "2026-10-29T18:39:15.118Z",
+          "size": 11929712,
           "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
           "minOSVersion": "16.2"
         }
       ],
       "version": "1.0.0",
-      "versionDate": "2026-10-29T08:57:00.475Z",
-      "size": 11912472,
+      "versionDate": "2026-10-29T18:39:15.118Z",
+      "size": 11929712,
       "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
       "appPermissions": {}
     }
