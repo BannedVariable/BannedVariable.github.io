@@ -1,7 +1,8 @@
 // Aurora's site. Opens the download section on the visitor's own platform and, when GitHub answers,
 // fills in the download counter, file sizes and how old the newest build is.
 (() => {
-  const REPO = 'BannedVariable/aurora';
+  // the public repo is where every downloadable release lives; the app repo stays private
+  const REPO = 'BannedVariable/BannedVariable.github.io';
   const API = `https://api.github.com/repos/${REPO}`;
   // SideStore fetches this itself, with no GitHub login, so it lives on the public site rather than
   // in a release on the (private) app repository.
@@ -188,7 +189,8 @@
       $('size-linux').textContent = `· ${mb(appImage.size)}`;
       $('linux-line').textContent = `mkdir -p ~/Applications && curl -L -o ~/Applications/Aurora.AppImage ${appImage.browser_download_url} && chmod +x ~/Applications/Aurora.AppImage && ~/Applications/Aurora.AppImage`;
     }
-    $('rel-version').textContent = rel.tag_name;
+    // beta builds carry no version number in the UI; the download links still point at the newest release
+    $('rel-version').textContent = 'Beta';
   }
 
   // ---- live updates ----
