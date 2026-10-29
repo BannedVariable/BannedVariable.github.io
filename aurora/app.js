@@ -56,12 +56,17 @@
   // ---- download counter ----
   // The phone and Windows builds are "rolling" releases that every build replaces, and GitHub resets a
   // file's count when it is replaced. Each build therefore writes the total so far into its release
-  // notes (see .github/carry-downloads.sh); seed covers releases made before that existed.
+  // notes (see .github/carry-downloads.sh); the counter starts at zero with 1.0.0, the first official
+  // release, and the beta line's totals are left out.
+  const FIRST_RELEASE = 'v1.0.0';
   const ROLLING = {
-    'android-latest': { file: 'Aurora.apk', platform: 'android', seed: 3530 },
-    'ios-latest': { file: 'Aurora.ipa', platform: 'ios', seed: 1640 },
-    'windows-latest': { file: 'Aurora.exe', platform: 'windows', seed: 6 },
+    'android-latest': { file: 'Aurora.apk', platform: 'android', seed: 0 },
+    'ios-latest': { file: 'Aurora.ipa', platform: 'ios', seed: 0 },
+    'windows-latest': { file: 'Aurora.exe', platform: 'windows', seed: 0 },
   };
+  // these platforms are counted from their rolling release only; the final release also carries their
+  // files so its page is complete, and counting both would count the same download twice
+  const ROLLING_PLATFORMS = new Set(Object.values(ROLLING).map((r) => r.platform));
   const PLATFORMS = [['android', 'Android'], ['ios', 'iPhone'], ['windows', 'Windows'], ['mac', 'Mac'], ['linux', 'Linux']];
   // installers only: .yml and .blockmap files are fetched by the desktop auto-updater, not by people
   const platformOf = (name) => (/\.apk$/i.test(name) ? 'android'
@@ -72,6 +77,8 @@
 
   function countDownloads(releases) {
     const per = { android: 0, ios: 0, windows: 0, mac: 0, linux: 0 };
+    const first = releases.find((r) => r.tag_name === FIRST_RELEASE);
+    const firstAt = first ? Date.parse(first.published_at || first.created_at || 0) : 0;
     for (const rel of releases) {
       const rolling = ROLLING[rel.tag_name];
       if (rolling) {
@@ -80,9 +87,11 @@
         per[rolling.platform] += (m ? Number(m[1]) : rolling.seed) + (asset ? asset.download_count : 0);
         continue;
       }
+      // the 1.3 beta line predates the first official release and must not add to the public total
+      if (firstAt && Date.parse(rel.published_at || rel.created_at || 0) < firstAt) continue;
       for (const a of rel.assets) {
         const p = platformOf(a.name);
-        if (p) per[p] += a.download_count;
+        if (p && !ROLLING_PLATFORMS.has(p)) per[p] += a.download_count;
       }
     }
     return per;
@@ -153,7 +162,8 @@
     document.querySelectorAll('[data-count]').forEach((el) => {
       const n = cardCounts[el.dataset.count];
       if (!el.dataset.fallback) el.dataset.fallback = el.textContent;
-      el.textContent = n ? `${fmt(n)} downloads` : el.dataset.fallback;
+      // the first official release starts at zero instead of showing the old beta totals
+      el.textContent = `${fmt(n)} downloads`;
     });
   }
 
@@ -189,12 +199,11 @@
       $('size-linux').textContent = `· ${mb(appImage.size)}`;
       $('linux-line').textContent = `mkdir -p ~/Applications && curl -L -o ~/Applications/Aurora.AppImage ${appImage.browser_download_url} && chmod +x ~/Applications/Aurora.AppImage && ~/Applications/Aurora.AppImage`;
     }
-    // beta builds carry no version number in the UI; the download links still point at the newest release
-    $('rel-version').textContent = 'Beta';
+    $('rel-version').textContent = rel.tag_name.replace(/^v/, '');
   }
 
   // ---- live updates ----
-  const cached = store.get('aurora_site_counts');
+  const cached = store.get('aurora_site_counts_v2');
   if (cached && cached.per) render(cached.per);
   let lastFetch = 0;
   let timer = 0;
@@ -215,7 +224,7 @@
       const per = countDownloads(releases);
       render(per);
       details(releases);
-      store.set('aurora_site_counts', { per, at: Date.now() });
+      store.set('aurora_site_counts_v2', { per, at: Date.now() });
       $('live-text').textContent = 'Live from GitHub';
       document.querySelector('.pulse').classList.remove('off');
     } catch (e) {
