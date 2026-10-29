@@ -28,11 +28,17 @@
   $('dl-ipa').href = 'https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa';
 
   // A signed build is optional: the signing service's install link is kept out of the HTML so a
-  // revoked or rotated certificate can be changed in one small file, and the button stays hidden
-  // until there is a link to give it. Accepts an itms-services manifest or an https install page.
+  // revoked or rotated certificate can be changed in one small file, and the buttons stay hidden
+  // until there is a link to give them. Accepts an itms-services manifest or an https install page.
+  // The second button opens the same build through SideStore, which needs the direct .ipa rather
+  // than a manifest, so signed.json can name one separately.
+  function isIpaUrl(value) {
+    try { return new URL(value).pathname.toLowerCase().endsWith('.ipa'); } catch (e) { return false; }
+  }
   async function loadSignedBuild() {
     const row = $('signed-row');
     const btn = $('dl-signed');
+    const storeBtn = $('dl-signed-sidestore');
     const note = $('signed-note');
     if (!row || !btn) return;
     try {
@@ -43,6 +49,18 @@
       if (!/^(https:|itms-services:)/i.test(url)) return;
       btn.href = url;
       if (cfg.label) btn.textContent = String(cfg.label);
+      if (storeBtn) {
+        let direct = String(cfg.ipa || cfg.ipaUrl || '').trim();
+        if (!direct && isIpaUrl(url)) direct = url;
+        const custom = String(cfg.sidestoreUrl || '').trim();
+        const storeUrl = /^sidestore:/i.test(custom) ? custom
+          : /^https:\/\//i.test(direct) && isIpaUrl(direct) ? `sidestore://install?url=${encodeURIComponent(direct)}` : '';
+        if (storeUrl) {
+          storeBtn.href = storeUrl;
+          if (cfg.sidestoreLabel) storeBtn.textContent = String(cfg.sidestoreLabel);
+          storeBtn.hidden = false;
+        }
+      }
       if (note) {
         note.textContent = String(cfg.note || '');
         note.hidden = !cfg.note;

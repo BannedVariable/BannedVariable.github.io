@@ -277,12 +277,11 @@
             <a class="btn outline" id="dl-ipa" data-dl="ios" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa">Download .ipa <small id="size-ios"></small></a>
           </div>
           <div class="btns signed-row" id="signed-row" hidden>
-            <a class="btn outline" id="dl-signed" data-dl="ios" href="#">Install signed beta</a>
+            <a class="btn" id="dl-signed" data-dl="ios" href="#">Try with certificate</a>
+            <a class="btn outline" id="dl-signed-sidestore" data-dl="ios" href="#" hidden>Try in SideStore</a>
           </div>
           <p class="note signed-note" id="signed-note" hidden></p>
           <p class="note">No SideStore? Install the .ipa with <a href="https://sideloadly.io">Sideloadly</a> from your computer. iPhones only run signed apps, so one of these is needed.</p>
-          <p class="note">Nothing happens when you tap it? In-app browsers (Instagram, Discord, Reddit, …) block SideStore links — open this page in <b>Safari</b>. You can also add the source by hand: SideStore → Sources → <b>+</b>, then paste this:</p>
-          <div class="copy"><code id="sidestore-url">https://bannedvariable.github.io/aurora/sidestore.json</code><button type="button" data-copy="sidestore-url">Copy</button></div>
         </div>
 
         <div class="card tabpanel" role="tabpanel" id="panel-windows" aria-labelledby="tab-windows" hidden>
@@ -316,7 +315,7 @@
           <details><summary>What is the desktop overlay?</summary><p>A transparent Dynamic Island that floats above your other windows. It appears while music plays; the rest of the time it is click-through, so it never blocks what you're doing. Hover it for play, skip and lyrics.</p></details>
           <details><summary>Do I need an account?</summary><p>Yes, a free one. It is how Aurora knows which library is yours, so signing in on a second device brings your songs with you and both devices appear in the player, ready to hand playback over.</p></details>
           <details><summary>Is Aurora connected to YouTube, SoundCloud or Spotify?</summary><p>No. Aurora is an independent, non-commercial player and hosts no music; it plays publicly available sources on your own device. Use it for private listening and only download music you have the right to.</p></details>
-          <details><summary>Why can't I just tap "install" on iPhone?</summary><p>iOS only runs apps signed with a certificate from Apple. The lasting route is SideStore or Sideloadly, which sign Aurora with your own Apple ID. When a signed beta build is available, its button appears above; it uses a third-party certificate, so it can stop opening if that certificate is revoked. Use it to try the beta, then move to SideStore or Sideloadly for something that keeps working.</p></details>
+          <details><summary>Why can't I just tap "install" on iPhone?</summary><p>iOS only runs apps signed with a certificate from Apple. The lasting route is SideStore or Sideloadly, which sign Aurora with your own Apple ID. When a signed beta build is available, its buttons appear above; they use a third-party certificate, so they can stop opening if that certificate is revoked. Use them to try the beta, then move to SideStore or Sideloadly for something that keeps working.</p></details>
           <details><summary>Why does my iPhone app stop opening after 7 days?</summary><p>Apps signed with a free Apple ID expire after 7 days. SideStore refreshes them automatically on your phone; with Sideloadly, just install again.</p></details>
           <details><summary>Does music keep playing with the screen off?</summary><p>Yes, on iPhone and Android, with play, pause and skip on the lock screen.</p></details>
           <details><summary>Where are my downloaded songs?</summary><p>Inside Aurora (Library → Offline). On iPhone they're also in the Files app under Aurora. On Android, downloads are also saved to Music/Aurora.</p></details>
