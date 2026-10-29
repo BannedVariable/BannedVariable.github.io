@@ -1,5 +1,5 @@
-// Aurora's site. Picks the right download for the visitor's device and shows live numbers from GitHub:
-// the download counter, file sizes, the latest desktop version, how old the newest build is, and stars.
+// Aurora's site. Opens the download section on the visitor's own platform and, when GitHub answers,
+// fills in the download counter, file sizes and how old the newest build is.
 (() => {
   const REPO = 'BannedVariable/aurora';
   const API = `https://api.github.com/repos/${REPO}`;
@@ -16,33 +16,16 @@
   // ---- your device ----
   const ua = navigator.userAgent;
   const touchMac = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
-  const linuxDesktop = /Linux|X11/.test(ua) && !/Android|Mac/.test(ua);
   const os = /iPhone|iPad|iPod/.test(ua) || touchMac ? 'ios'
     : /Android/i.test(ua) ? 'android'
     : /Windows/i.test(ua) ? 'windows'
     : /Macintosh|Linux|X11/i.test(ua) ? 'desktop' : null;
-  const OS_NAME = { android: 'Android', ios: 'iPhone', windows: 'Windows', desktop: linuxDesktop ? 'Linux' : 'Mac' };
   $('dl-sidestore').href = `sidestore://source?url=${encodeURIComponent(SOURCE_URL)}`;
   // the same file the source points at: one link for the store, one for Sideloadly
   $('dl-ipa').href = 'https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa';
 
-  // where "Download" goes: the file itself where one tap installs, otherwise the right tab
-  function mainHref() {
-    if (os === 'android') return $('dl-android').href;
-    if (os === 'windows') return $('dl-windows').href;
-    if (os === 'desktop') return (linuxDesktop ? $('dl-linux') : $('dl-mac-arm')).href;
-    return '#download';
-  }
-  function updateMainLinks() {
-    const href = mainHref();
-    ['main-dl', 'np-get'].forEach((id) => { $(id).href = href; });
-  }
-  if (os) {
-    $('main-dl-label').textContent = `Download for ${OS_NAME[os]}`;
-    $('main-dl').setAttribute('aria-label', `Download Aurora for ${OS_NAME[os]}`);
-    $('np-get').textContent = os === 'ios' ? 'Get' : 'Download';
-  }
-  updateMainLinks();
+  // "Download" in the hero and the bar goes to the download section, never straight to one file:
+  // Aurora runs on five platforms, so the visitor picks there (and their own tab is already open).
 
   // ---- platform tabs ----
   const tabs = [...document.querySelectorAll('[role="tab"]')];
@@ -157,6 +140,7 @@
   }
 
   function render(per) {
+    $('count').hidden = false;
     const total = Object.values(per).reduce((a, b) => a + b, 0);
     setOdometer(total);
     $('count-sr').textContent = `${fmt(total)} downloads`;
@@ -204,7 +188,6 @@
       $('linux-line').textContent = `mkdir -p ~/Applications && curl -L -o ~/Applications/Aurora.AppImage ${appImage.browser_download_url} && chmod +x ~/Applications/Aurora.AppImage && ~/Applications/Aurora.AppImage`;
     }
     $('rel-version').textContent = rel.tag_name;
-    updateMainLinks();
   }
 
   // ---- live updates ----
@@ -219,7 +202,7 @@
       let releases = null;
       try {
         const s = await fetch(`stats.json?t=${Math.floor(Date.now() / 60000)}`, { cache: 'no-store' });
-        if (s.ok) { const j = await s.json(); if (j && Array.isArray(j.releases)) { releases = j.releases; if (Number.isFinite(j.stars)) { showStars(j.stars); store.set('aurora_site_stars', j.stars); } } }
+        if (s.ok) { const j = await s.json(); if (j && Array.isArray(j.releases)) releases = j.releases; }
       } catch (e) {}
       if (!releases) {
         const res = await fetch(`${API}/releases?per_page=100`, { headers: { Accept: 'application/vnd.github+json' } });
@@ -249,15 +232,6 @@
   });
   refresh();
 
-  // stars, once per visit
-  const showStars = (n) => document.querySelectorAll('.stars-n').forEach((el) => { el.textContent = fmt(n); });
-  const cachedStars = store.get('aurora_site_stars');
-  if (cachedStars) showStars(cachedStars);
-  if (!cachedStars) fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
-    .then((r) => (r.ok ? r.json() : null))
-    .then((j) => { if (j && Number.isFinite(j.stargazers_count)) { showStars(j.stargazers_count); store.set('aurora_site_stars', j.stargazers_count); } })
-    .catch(() => {});
-
   // ---- the bar at the top: where you are, and the menu on small screens ----
   const nav = $('nav');
   const toggle = $('nav-toggle');
@@ -265,7 +239,7 @@
   toggle.addEventListener('click', () => setMenu(!nav.classList.contains('open')));
   document.querySelectorAll('#nav-links a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
-  const sections = [...document.querySelectorAll('#features, #inside, #download, #faq')];
+  const sections = [...document.querySelectorAll('#features, #download, #faq')];
   const navLinks = [...document.querySelectorAll('#nav-links a[data-sec]')];
   let ticking = false;
   function onScroll() {
@@ -288,20 +262,6 @@
   } else {
     reveals.forEach((el) => el.classList.add('in'));
   }
-
-  // ---- screenshot gallery paddles ----
-  const shelf = $('shelf');
-  const paddles = [...document.querySelectorAll('[data-scroll]')];
-  paddles.forEach((b) => b.addEventListener('click', () => {
-    shelf.scrollBy({ left: Number(b.dataset.scroll) * shelf.clientWidth * 0.8, behavior: 'smooth' });
-  }));
-  const syncPaddles = () => {
-    const max = shelf.scrollWidth - shelf.clientWidth - 2;
-    paddles.forEach((b) => { b.disabled = Number(b.dataset.scroll) < 0 ? shelf.scrollLeft <= 2 : shelf.scrollLeft >= max; });
-  };
-  shelf.addEventListener('scroll', () => requestAnimationFrame(syncPaddles), { passive: true });
-  window.addEventListener('resize', syncPaddles, { passive: true });
-  syncPaddles();
 
   document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => {
     try {
