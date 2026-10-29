@@ -3,7 +3,9 @@
 (() => {
   const REPO = 'BannedVariable/aurora';
   const API = `https://api.github.com/repos/${REPO}`;
-  const SOURCE_URL = `https://github.com/${REPO}/releases/download/ios-latest/sidestore.json`;
+  // SideStore fetches this itself, with no GitHub login, so it lives on the public site rather than
+  // in a release on the (private) app repository.
+  const SOURCE_URL = 'https://bannedvariable.github.io/aurora/sidestore.json';
   const REFRESH_MS = 90 * 1000; // GitHub allows 60 unauthenticated requests an hour per visitor
   const $ = (id) => document.getElementById(id);
   const store = {
@@ -21,6 +23,8 @@
     : /Macintosh|Linux|X11/i.test(ua) ? 'desktop' : null;
   const OS_NAME = { android: 'Android', ios: 'iPhone', windows: 'Windows', desktop: linuxDesktop ? 'Linux' : 'Mac' };
   $('dl-sidestore').href = `sidestore://source?url=${encodeURIComponent(SOURCE_URL)}`;
+  // the same file the source points at: one link for the store, one for Sideloadly
+  $('dl-ipa').href = 'https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa';
 
   // where "Download" goes: the file itself where one tap installs, otherwise the right tab
   function mainHref() {
