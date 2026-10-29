@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=5">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -137,18 +137,34 @@
             </div>
             <div class="overlay-demo" data-overlay-demo>
               <div class="od-screen" aria-hidden="true">
-                <div class="od-screen-bar"><i></i><i></i><i></i></div>
-                <div class="od-screen-body"><span></span><span></span><span></span><span></span></div>
+                <div class="od-menubar"><span class="od-dots"><i></i><i></i><i></i></span><span class="od-clock">9:41</span></div>
+                <div class="od-window">
+                  <div class="od-win-bar"><i></i><i></i><i></i></div>
+                  <div class="od-win-lines"><i></i><i></i><i></i><i></i></div>
+                </div>
               </div>
-              <div class="od-pill" role="group" aria-label="Dynamic Island overlay preview">
-                <img class="od-art" src="icon.png" alt="" width="40" height="40">
-                <span class="od-meta" aria-live="polite"><b data-od-title>Midnight City</b><small data-od-artist>M83</small></span>
-                <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
-                <button class="od-btn" type="button" data-od-prev aria-label="Previous track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zm12 0-9 7 9 7z"/></svg></button>
-                <button class="od-btn od-play" type="button" data-od-play aria-label="Pause"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
-                <button class="od-btn" type="button" data-od-next aria-label="Next track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM6 5l9 7-9 7z"/></svg></button>
+              <div class="od-island" data-od-island>
+                <button class="od-compact" type="button" data-od-expand aria-expanded="false" aria-controls="od-expanded" aria-label="Expand the Dynamic Island overlay preview">
+                  <span class="od-art" aria-hidden="true"></span>
+                  <span class="od-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                </button>
+                <div class="od-expanded" id="od-expanded">
+                  <div class="od-head">
+                    <span class="od-art od-art-lg" aria-hidden="true"></span>
+                    <span class="od-meta" aria-live="polite"><b data-od-title>Midnight City</b><small data-od-artist>M83</small></span>
+                    <span class="od-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                  </div>
+                  <p class="od-lyric" data-od-lyric>Waiting for the night to come</p>
+                  <div class="od-seek" aria-hidden="true"><span class="od-seek-track"><span class="od-seek-fill" data-od-fill></span></span></div>
+                  <div class="od-times" aria-hidden="true"><span data-od-time>1:42</span><span data-od-left>-2:21</span></div>
+                  <div class="od-controls">
+                    <button class="od-btn" type="button" data-od-prev aria-label="Previous track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zm12 0-9 7 9 7z"/></svg></button>
+                    <button class="od-btn od-play" type="button" data-od-play aria-label="Pause"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+                    <button class="od-btn" type="button" data-od-next aria-label="Next track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM6 5l9 7-9 7z"/></svg></button>
+                  </div>
+                </div>
               </div>
-              <p class="od-hint">Hover it — click-through elsewhere.</p>
+              <p class="od-hint">Hover or tap to expand · click-through elsewhere</p>
             </div>
           </article>
 
@@ -194,7 +210,20 @@
               <p>Controls on your lock screen, lyrics in the iPhone Dynamic Island, and play and pause in the Android notification.</p>
             </div>
             <div class="island" aria-hidden="true">
-              <div class="island-pill"><span><b>Boy's a liar Pt. 2</b><small>He doesn't see ya, you're not looking at me</small></span><i class="bars"><i></i><i></i><i></i></i></div>
+              <div class="island-screen">
+                <div class="island-status"><span>9:41</span><span class="island-signal"><i></i><i></i><i></i></span></div>
+                <div class="island-pill">
+                  <span class="od-art"></span>
+                  <span class="od-wave"><i></i><i></i><i></i><i></i><i></i></span>
+                </div>
+                <div class="island-clock">9:41</div>
+                <div class="island-date">Monday, October 29</div>
+                <div class="island-player">
+                  <span class="od-art"></span>
+                  <span class="island-copy"><b>Boy's a liar Pt. 2</b><small>He doesn't see ya, you're not looking at me</small></span>
+                  <span class="od-wave"><i></i><i></i><i></i><i></i><i></i></span>
+                </div>
+              </div>
             </div>
           </article>
 
@@ -247,6 +276,10 @@
             <a class="btn" id="dl-sidestore" data-dl="ios" href="#">Add to SideStore</a>
             <a class="btn outline" id="dl-ipa" data-dl="ios" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa">Download .ipa <small id="size-ios"></small></a>
           </div>
+          <div class="btns signed-row" id="signed-row" hidden>
+            <a class="btn outline" id="dl-signed" data-dl="ios" href="#">Install signed beta</a>
+          </div>
+          <p class="note signed-note" id="signed-note" hidden></p>
           <p class="note">No SideStore? Install the .ipa with <a href="https://sideloadly.io">Sideloadly</a> from your computer. iPhones only run signed apps, so one of these is needed.</p>
           <p class="note">Nothing happens when you tap it? In-app browsers (Instagram, Discord, Reddit, …) block SideStore links — open this page in <b>Safari</b>. You can also add the source by hand: SideStore → Sources → <b>+</b>, then paste this:</p>
           <div class="copy"><code id="sidestore-url">https://bannedvariable.github.io/aurora/sidestore.json</code><button type="button" data-copy="sidestore-url">Copy</button></div>
@@ -283,7 +316,7 @@
           <details><summary>What is the desktop overlay?</summary><p>A transparent Dynamic Island that floats above your other windows. It appears while music plays; the rest of the time it is click-through, so it never blocks what you're doing. Hover it for play, skip and lyrics.</p></details>
           <details><summary>Do I need an account?</summary><p>Yes, a free one. It is how Aurora knows which library is yours, so signing in on a second device brings your songs with you and both devices appear in the player, ready to hand playback over.</p></details>
           <details><summary>Is Aurora connected to YouTube, SoundCloud or Spotify?</summary><p>No. Aurora is an independent, non-commercial player and hosts no music; it plays publicly available sources on your own device. Use it for private listening and only download music you have the right to.</p></details>
-          <details><summary>Why can't I just tap "install" on iPhone?</summary><p>iOS only runs apps signed with a certificate from Apple. Aurora doesn't use leaked certificates (those get revoked and can push anything to your phone), so on iPhone it installs through SideStore or Sideloadly with your own Apple ID.</p></details>
+          <details><summary>Why can't I just tap "install" on iPhone?</summary><p>iOS only runs apps signed with a certificate from Apple. The lasting route is SideStore or Sideloadly, which sign Aurora with your own Apple ID. When a signed beta build is available, its button appears above; it uses a third-party certificate, so it can stop opening if that certificate is revoked. Use it to try the beta, then move to SideStore or Sideloadly for something that keeps working.</p></details>
           <details><summary>Why does my iPhone app stop opening after 7 days?</summary><p>Apps signed with a free Apple ID expire after 7 days. SideStore refreshes them automatically on your phone; with Sideloadly, just install again.</p></details>
           <details><summary>Does music keep playing with the screen off?</summary><p>Yes, on iPhone and Android, with play, pause and skip on the lock screen.</p></details>
           <details><summary>Where are my downloaded songs?</summary><p>Inside Aurora (Library → Offline). On iPhone they're also in the Files app under Aurora. On Android, downloads are also saved to Music/Aurora.</p></details>
@@ -315,6 +348,6 @@
     <symbol id="i-desktop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></g></symbol>
   </svg>
 
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

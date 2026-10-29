@@ -27,6 +27,31 @@
   // the same file the source points at: one link for the store, one for Sideloadly
   $('dl-ipa').href = 'https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa';
 
+  // A signed build is optional: the signing service's install link is kept out of the HTML so a
+  // revoked or rotated certificate can be changed in one small file, and the button stays hidden
+  // until there is a link to give it. Accepts an itms-services manifest or an https install page.
+  async function loadSignedBuild() {
+    const row = $('signed-row');
+    const btn = $('dl-signed');
+    const note = $('signed-note');
+    if (!row || !btn) return;
+    try {
+      const res = await fetch('signed.json', { cache: 'no-store' });
+      if (!res.ok) return;
+      const cfg = await res.json();
+      const url = String(cfg.url || cfg.installUrl || '').trim();
+      if (!/^(https:|itms-services:)/i.test(url)) return;
+      btn.href = url;
+      if (cfg.label) btn.textContent = String(cfg.label);
+      if (note) {
+        note.textContent = String(cfg.note || '');
+        note.hidden = !cfg.note;
+      }
+      row.hidden = false;
+    } catch (e) { /* no signed build configured */ }
+  }
+  loadSignedBuild();
+
   // "Download" in the hero and the bar goes to the download section, never straight to one file:
   // Aurora runs on five platforms, so the visitor picks there (and their own tab is already open).
 
@@ -281,33 +306,94 @@
   const overlayDemo = document.querySelector('[data-overlay-demo]');
   if (overlayDemo) {
     const tracks = [
-      { title: 'Midnight City', artist: 'M83' },
-      { title: "Boy's a liar Pt. 2", artist: 'PinkPantheress & Ice Spice' },
-      { title: 'Sofia', artist: 'Clairo' },
+      { title: 'Midnight City', artist: 'M83', lyric: 'Waiting for the night to come', duration: 244, start: 102 },
+      { title: "Boy's a liar Pt. 2", artist: 'PinkPantheress & Ice Spice', lyric: "He doesn't see ya, you're not looking at me", duration: 131, start: 38 },
+      { title: 'Sofia', artist: 'Clairo', lyric: 'I think we could do it if we tried', duration: 187, start: 64 },
     ];
     const odTitle = overlayDemo.querySelector('[data-od-title]');
     const odArtist = overlayDemo.querySelector('[data-od-artist]');
+    const odLyric = overlayDemo.querySelector('[data-od-lyric]');
     const odPlay = overlayDemo.querySelector('[data-od-play]');
+    const odFill = overlayDemo.querySelector('[data-od-fill]');
+    const odTime = overlayDemo.querySelector('[data-od-time]');
+    const odLeft = overlayDemo.querySelector('[data-od-left]');
+    const odIsland = overlayDemo.querySelector('[data-od-island]');
+    const odExpand = overlayDemo.querySelector('[data-od-expand]');
     let odTrack = 0;
     let odPlaying = true;
+    let odPosition = tracks[0].start;
+    const clock = (seconds) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+    const paintProgress = () => {
+      const track = tracks[odTrack];
+      const done = Math.min(odPosition, track.duration);
+      if (odFill) odFill.style.width = `${(done / track.duration) * 100}%`;
+      if (odTime) odTime.textContent = clock(done);
+      if (odLeft) odLeft.textContent = `-${clock(Math.max(0, track.duration - done))}`;
+    };
     const paintOverlay = () => {
       const track = tracks[odTrack];
       odTitle.textContent = track.title;
       odArtist.textContent = track.artist;
+      if (odLyric) odLyric.textContent = track.lyric;
       overlayDemo.classList.toggle('is-paused', !odPlaying);
       odPlay.classList.toggle('is-paused', !odPlaying);
       odPlay.setAttribute('aria-label', odPlaying ? 'Pause' : 'Play');
+      paintProgress();
     };
-    overlayDemo.querySelector('[data-od-prev]').addEventListener('click', () => {
-      odTrack = (odTrack + tracks.length - 1) % tracks.length;
+    const move = (step) => {
+      odTrack = (odTrack + step + tracks.length) % tracks.length;
+      odPosition = 0;
       paintOverlay();
-    });
-    overlayDemo.querySelector('[data-od-next]').addEventListener('click', () => {
-      odTrack = (odTrack + 1) % tracks.length;
-      paintOverlay();
-    });
+    };
+    overlayDemo.querySelector('[data-od-prev]').addEventListener('click', () => move(-1));
+    overlayDemo.querySelector('[data-od-next]').addEventListener('click', () => move(1));
     odPlay.addEventListener('click', () => { odPlaying = !odPlaying; paintOverlay(); });
+
+    // the compact capsule opens on hover, keyboard focus, or tap; tapping outside closes it
+    if (odIsland && odExpand) {
+      const hoverable = window.matchMedia('(hover: hover)').matches;
+      const syncExpanded = () => odExpand.setAttribute('aria-expanded', String(odIsland.classList.contains('is-open') || odIsland.matches(':focus-within')));
+      odExpand.addEventListener('click', () => {
+        odIsland.classList.add('is-open');
+        syncExpanded();
+      });
+      if (hoverable) {
+        odIsland.addEventListener('mouseenter', () => {
+          odIsland.classList.add('is-open');
+          syncExpanded();
+        });
+        odIsland.addEventListener('mouseleave', () => {
+          if (odIsland.contains(document.activeElement)) return;
+          odIsland.classList.remove('is-open');
+          syncExpanded();
+        });
+      }
+      odIsland.addEventListener('focusin', syncExpanded);
+      odIsland.addEventListener('focusout', () => setTimeout(syncExpanded, 0));
+      odIsland.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        odIsland.classList.remove('is-open');
+        if (odIsland.contains(document.activeElement)) document.activeElement.blur();
+        syncExpanded();
+      });
+      document.addEventListener('click', (event) => {
+        if (odIsland.contains(event.target)) return;
+        odIsland.classList.remove('is-open');
+        if (odIsland.contains(document.activeElement)) document.activeElement.blur();
+        syncExpanded();
+      });
+    }
+
     paintOverlay();
+    setInterval(() => {
+      if (!odPlaying) return;
+      odPosition += 1;
+      if (odPosition >= tracks[odTrack].duration) {
+        odTrack = (odTrack + 1) % tracks.length;
+        odPosition = 0;
+      }
+      paintOverlay();
+    }, 1000);
   }
 
   // ---- device handoff preview ----

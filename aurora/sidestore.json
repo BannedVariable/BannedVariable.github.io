@@ -1,13 +1,13 @@
 {
   "name": "Aurora",
-  "identifier": "io.github.cloverscripts.aurora.source",
+  "identifier": "com.bannedvariable.aurora.source",
   "iconURL": "https://bannedvariable.github.io/aurora/icon.png",
   "website": "https://bannedvariable.github.io/aurora/",
   "tintColor": "7C4DFF",
   "apps": [
     {
       "name": "Aurora",
-      "bundleIdentifier": "io.github.cloverscripts.aurora",
+      "bundleIdentifier": "com.bannedvariable.aurora",
       "developerName": "BannedVariable",
       "subtitle": "Free music player",
       "iconURL": "https://bannedvariable.github.io/aurora/icon.png",
@@ -17,15 +17,15 @@
         {
           "version": "1.0.0",
           "buildVersion": "0",
-          "date": "2026-10-29T05:16:59.151Z",
-          "size": 11901277,
+          "date": "2026-10-29T07:13:44Z",
+          "size": 11911852,
           "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
           "minOSVersion": "16.2"
         }
       ],
       "version": "1.0.0",
-      "versionDate": "2026-10-29T05:16:59.151Z",
-      "size": 11901277,
+      "versionDate": "2026-10-29T07:13:44Z",
+      "size": 11911852,
       "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
       "appPermissions": {}
     }

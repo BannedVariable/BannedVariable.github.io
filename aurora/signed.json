@@ -1,0 +1,5 @@
+{
+  "url": "",
+  "label": "Install signed beta",
+  "note": "Signed with a third-party certificate. iOS may stop opening it if that certificate is revoked; for a lasting install, use SideStore or Sideloadly with your own Apple ID."
+}
