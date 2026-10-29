@@ -20,7 +20,8 @@
     : /Android/i.test(ua) ? 'android'
     : /Windows/i.test(ua) ? 'windows'
     : /Macintosh|Linux|X11/i.test(ua) ? 'desktop' : null;
-  $('dl-sidestore').href = `sidestore://source?url=${encodeURIComponent(SOURCE_URL)}`;
+  // SideStore's docs pass the source URL through unencoded; percent-escapes are what its parser chokes on.
+  $('dl-sidestore').href = `sidestore://source?url=${SOURCE_URL}`;
   // the same file the source points at: one link for the store, one for Sideloadly
   $('dl-ipa').href = 'https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa';
 
