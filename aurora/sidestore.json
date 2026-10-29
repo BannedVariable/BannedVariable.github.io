@@ -1,0 +1,39 @@
+{
+  "name": "Aurora",
+  "identifier": "io.github.cloverscripts.aurora.source",
+  "iconURL": "https://bannedvariable.github.io/aurora/icon.png",
+  "website": "https://bannedvariable.github.io/aurora/",
+  "tintColor": "7C4DFF",
+  "apps": [
+    {
+      "name": "Aurora",
+      "bundleIdentifier": "io.github.cloverscripts.aurora",
+      "developerName": "cloverscripts",
+      "subtitle": "Free music player",
+      "localizedDescription": "Free, ad-free music player. Stream from YouTube, YouTube Music and SoundCloud, synced lyrics, offline songs, playlists and recommendations. Independent and non-commercial, not affiliated with YouTube, SoundCloud or Spotify.",
+      "iconURL": "https://bannedvariable.github.io/aurora/icon.png",
+      "tintColor": "7C4DFF",
+      "screenshotURLs": [
+        "https://bannedvariable.github.io/aurora/shots/home.jpg",
+        "https://bannedvariable.github.io/aurora/shots/player.jpg",
+        "https://bannedvariable.github.io/aurora/shots/search.jpg"
+      ],
+      "versions": [
+        {
+          "version": "1.3.6",
+          "buildVersion": "6",
+          "date": "2026-10-29T02:02:48Z",
+          "size": 11899715,
+          "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
+          "minOSVersion": "16.2"
+        }
+      ],
+      "version": "1.3.6",
+      "versionDate": "2026-10-29T02:02:48Z",
+      "size": 11899715,
+      "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
+      "appPermissions": {}
+    }
+  ],
+  "news": []
+}
