@@ -277,6 +277,80 @@
   });
   refresh();
 
+  // ---- the Dynamic Island preview ----
+  const overlayDemo = document.querySelector('[data-overlay-demo]');
+  if (overlayDemo) {
+    const tracks = [
+      { title: 'Midnight City', artist: 'M83' },
+      { title: "Boy's a liar Pt. 2", artist: 'PinkPantheress & Ice Spice' },
+      { title: 'Sofia', artist: 'Clairo' },
+    ];
+    const odTitle = overlayDemo.querySelector('[data-od-title]');
+    const odArtist = overlayDemo.querySelector('[data-od-artist]');
+    const odPlay = overlayDemo.querySelector('[data-od-play]');
+    let odTrack = 0;
+    let odPlaying = true;
+    const paintOverlay = () => {
+      const track = tracks[odTrack];
+      odTitle.textContent = track.title;
+      odArtist.textContent = track.artist;
+      overlayDemo.classList.toggle('is-paused', !odPlaying);
+      odPlay.classList.toggle('is-paused', !odPlaying);
+      odPlay.setAttribute('aria-label', odPlaying ? 'Pause' : 'Play');
+    };
+    overlayDemo.querySelector('[data-od-prev]').addEventListener('click', () => {
+      odTrack = (odTrack + tracks.length - 1) % tracks.length;
+      paintOverlay();
+    });
+    overlayDemo.querySelector('[data-od-next]').addEventListener('click', () => {
+      odTrack = (odTrack + 1) % tracks.length;
+      paintOverlay();
+    });
+    odPlay.addEventListener('click', () => { odPlaying = !odPlaying; paintOverlay(); });
+    paintOverlay();
+  }
+
+  // ---- device handoff preview ----
+  const handoff = document.querySelector('[data-handoff]');
+  if (handoff) {
+    const devices = [...handoff.querySelectorAll('[data-device]')];
+    const status = handoff.querySelector('[data-hd-status]');
+    const names = { phone: 'iPhone', desktop: 'Desktop' };
+    const paintHandoff = (device) => {
+      handoff.dataset.playing = device;
+      devices.forEach((button) => {
+        const on = button.dataset.device === device;
+        button.classList.toggle('is-on', on);
+        button.setAttribute('aria-pressed', String(on));
+        const label = button.querySelector('small');
+        if (label) label.textContent = on ? 'Playing' : 'Ready';
+      });
+      if (status) status.textContent = `Playing on ${names[device]} · 1:42`;
+    };
+    devices.forEach((button) => button.addEventListener('click', () => paintHandoff(button.dataset.device)));
+    paintHandoff('phone');
+  }
+
+  // ---- a soft lavender spotlight follows the pointer across the feature cards ----
+  const bento = document.querySelector('.bento');
+  if (bento && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let frame = 0;
+    let last = null;
+    bento.addEventListener('pointermove', (event) => {
+      const tile = event.target.closest('.tile');
+      if (!tile) return;
+      last = { tile, x: event.clientX, y: event.clientY };
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        if (!last) return;
+        const rect = last.tile.getBoundingClientRect();
+        last.tile.style.setProperty('--mx', `${last.x - rect.left}px`);
+        last.tile.style.setProperty('--my', `${last.y - rect.top}px`);
+      });
+    }, { passive: true });
+  }
+
   // ---- the bar at the top: where you are, and the menu on small screens ----
   const nav = $('nav');
   const toggle = $('nav-toggle');
