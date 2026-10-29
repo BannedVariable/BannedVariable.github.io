@@ -13,11 +13,6 @@
       "localizedDescription": "Free, ad-free music player. Stream from YouTube, YouTube Music and SoundCloud, synced lyrics, offline songs, playlists and recommendations. Independent and non-commercial, not affiliated with YouTube, SoundCloud or Spotify.",
       "iconURL": "https://bannedvariable.github.io/aurora/icon.png",
       "tintColor": "7C4DFF",
-      "screenshotURLs": [
-        "https://bannedvariable.github.io/aurora/shots/home.jpg",
-        "https://bannedvariable.github.io/aurora/shots/player.jpg",
-        "https://bannedvariable.github.io/aurora/shots/search.jpg"
-      ],
       "versions": [
         {
           "version": "1.3.6",
