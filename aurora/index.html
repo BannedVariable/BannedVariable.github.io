@@ -56,7 +56,7 @@
       <p class="eyebrow light reveal">Downloaded</p>
       <div class="odo reveal" id="odo" aria-hidden="true"><span class="odo-wait">—</span></div>
       <p class="sr" id="count-sr" aria-live="polite"></p>
-      <p class="count-label reveal" id="count-label"><span>times, and counting.</span> <span class="live"><span class="pulse" aria-hidden="true"></span><span id="live-text">Live from GitHub</span></span></p>
+      <p class="count-label reveal" id="count-label"><span>times, and counting.</span> <span class="live"><span class="pulse" aria-hidden="true"></span><span id="live-text">Live</span></span></p>
       <ol class="ranks reveal" id="ranks" aria-label="Downloads per platform"></ol>
     </section>
 
@@ -147,15 +147,15 @@
         <div class="card tabpanel" role="tabpanel" id="panel-android" aria-labelledby="tab-android" hidden>
           <div class="card-head"><h3>Android</h3><span class="n" data-count="android"></span></div>
           <ol class="steps"><li>Download <b>Aurora.apk</b> on your phone.</li><li>Open it. If Android asks, allow installs from your browser.</li><li>Tap <b>Install</b>. Updates install over it and keep your music.</li></ol>
-          <div class="btns"><a class="btn" id="dl-android" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/android-latest/Aurora.apk">Download APK <small id="size-android"></small></a></div>
+          <div class="btns"><a class="btn" id="dl-android" data-dl="android" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/android-latest/Aurora.apk">Download APK <small id="size-android"></small></a></div>
         </div>
 
         <div class="card tabpanel" role="tabpanel" id="panel-ios" aria-labelledby="tab-ios" hidden>
           <div class="card-head"><h3>iPhone</h3><span class="n" data-count="ios"></span></div>
           <ol class="steps"><li>Install <a href="https://sidestore.io">SideStore</a> once (needs a computer one time).</li><li>Tap <b>Add to SideStore</b>. Aurora installs and keeps itself updated.</li></ol>
           <div class="btns">
-            <a class="btn" id="dl-sidestore" href="#">Add to SideStore</a>
-            <a class="btn outline" id="dl-ipa" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa">Download .ipa <small id="size-ios"></small></a>
+            <a class="btn" id="dl-sidestore" data-dl="ios" href="#">Add to SideStore</a>
+            <a class="btn outline" id="dl-ipa" data-dl="ios" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa">Download .ipa <small id="size-ios"></small></a>
           </div>
           <p class="note">No SideStore? Install the .ipa with <a href="https://sideloadly.io">Sideloadly</a> from your computer. iPhones only run signed apps, so one of these is needed.</p>
           <p class="note">Nothing happens when you tap it? In-app browsers (Instagram, Discord, Reddit, …) block SideStore links — open this page in <b>Safari</b>. You can also add the source by hand: SideStore → Sources → <b>+</b>, then paste this:</p>
@@ -165,16 +165,16 @@
         <div class="card tabpanel" role="tabpanel" id="panel-windows" aria-labelledby="tab-windows" hidden>
           <div class="card-head"><h3>Windows</h3><span class="n" data-count="windows"></span></div>
           <ol class="steps"><li>Download <b>Aurora.exe</b> and run the installer.</li><li>If SmartScreen appears: <b>More info → Run anyway</b>. It installs for your user; no administrator needed.</li></ol>
-          <div class="btns"><a class="btn" id="dl-windows" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/windows-latest/Aurora.exe">Download for Windows <small id="size-windows"></small></a></div>
+          <div class="btns"><a class="btn" id="dl-windows" data-dl="windows" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/windows-latest/Aurora.exe">Download for Windows <small id="size-windows"></small></a></div>
         </div>
 
         <div class="card tabpanel" role="tabpanel" id="panel-desktop" aria-labelledby="tab-desktop" hidden>
           <div class="card-head"><h3>Mac &amp; Linux</h3><span class="n" data-count="desktop"></span></div>
           <ol class="steps"><li>Pick your download below (<b id="rel-version">1.0.0</b>).</li><li>Mac: the app is unsigned, so macOS says it is damaged — run <code>xattr -cr /Applications/Aurora.app</code>, then open it.</li></ol>
           <div class="btns">
-            <a class="btn" id="dl-mac-arm" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/Aurora-1.0.0-mac-arm64.dmg">Mac with Apple silicon</a>
-            <a class="btn outline" id="dl-mac-x64" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/Aurora-1.0.0-mac-x64.dmg">Mac with Intel</a>
-            <a class="btn outline" id="dl-linux" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/aurora-1.0.0-linux-x86_64.AppImage">Linux AppImage <small id="size-linux"></small></a>
+            <a class="btn" id="dl-mac-arm" data-dl="mac" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/Aurora-1.0.0-mac-arm64.dmg">Mac with Apple silicon</a>
+            <a class="btn outline" id="dl-mac-x64" data-dl="mac" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/Aurora-1.0.0-mac-x64.dmg">Mac with Intel</a>
+            <a class="btn outline" id="dl-linux" data-dl="linux" href="https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/aurora-1.0.0-linux-x86_64.AppImage">Linux AppImage <small id="size-linux"></small></a>
           </div>
           <p class="note">Linux in one line (needs FUSE 2, e.g. <code>fuse2</code> or <code>libfuse2</code>):</p>
           <div class="copy"><code id="linux-line">mkdir -p ~/Applications && curl -L -o ~/Applications/Aurora.AppImage https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/aurora-1.0.0-linux-x86_64.AppImage && chmod +x ~/Applications/Aurora.AppImage && ~/Applications/Aurora.AppImage</code><button type="button" data-copy="linux-line">Copy</button></div>
@@ -222,6 +222,6 @@
     <symbol id="i-desktop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></g></symbol>
   </svg>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

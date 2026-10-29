@@ -1,5 +1,5 @@
-// Aurora's site. Opens the download section on the visitor's own platform and, when GitHub answers,
-// fills in the download counter, file sizes and how old the newest build is.
+// Aurora's site. Opens the download section on the visitor's own platform, counts each download in
+// Supabase, and — when GitHub answers — fills in file sizes and how old the newest build is.
 (() => {
   // the public repo is where every downloadable release lives; the app repo stays private
   const REPO = 'BannedVariable/BannedVariable.github.io';
@@ -7,7 +7,8 @@
   // SideStore fetches this itself, with no GitHub login, so it lives on the public site rather than
   // in a release on the (private) app repository.
   const SOURCE_URL = 'https://bannedvariable.github.io/aurora/sidestore.json';
-  const REFRESH_MS = 90 * 1000; // GitHub allows 60 unauthenticated requests an hour per visitor
+  const REFRESH_MS = 60 * 1000; // the counter is one Supabase read a minute
+  const DETAILS_MS = 30 * 60 * 1000; // sizes and versions come from GitHub, which changes far less often
   const $ = (id) => document.getElementById(id);
   const store = {
     get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
@@ -54,47 +55,48 @@
   selectTab(os || 'android');
 
   // ---- download counter ----
-  // The phone and Windows builds are "rolling" releases that every build replaces, and GitHub resets a
-  // file's count when it is replaced. Each build therefore writes the total so far into its release
-  // notes (see .github/carry-downloads.sh); the counter starts at zero with 1.0.0, the first official
-  // release, and the beta line's totals are left out.
-  const FIRST_RELEASE = 'v1.0.0';
-  const ROLLING = {
-    'android-latest': { file: 'Aurora.apk', platform: 'android', seed: 0 },
-    'ios-latest': { file: 'Aurora.ipa', platform: 'ios', seed: 0 },
-    'windows-latest': { file: 'Aurora.exe', platform: 'windows', seed: 0 },
+  // GitHub's release download_count only refreshes about ten minutes after a download and resets
+  // whenever a rolling release's file is replaced, so the site counts its own downloads in the same
+  // Supabase project as cloud profiles. Both values are public by design: row level security keeps
+  // the table unreachable, and only the two counter functions below can be called with this key.
+  const CLOUD = {
+    url: 'https://bxmeboourjndlxkbqaic.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4bWVib291cmpuZGx4a2JxYWljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxNDU5MTEsImV4cCI6MjEwODcyMTkxMX0.Tcuh6_VEftc-Bi623D3K9-tuWpzGFpZsDfh8VBIDJys',
   };
-  // these platforms are counted from their rolling release only; the final release also carries their
-  // files so its page is complete, and counting both would count the same download twice
-  const ROLLING_PLATFORMS = new Set(Object.values(ROLLING).map((r) => r.platform));
+  const COUNTS_KEY = 'aurora_site_counts_v3';
   const PLATFORMS = [['android', 'Android'], ['ios', 'iPhone'], ['windows', 'Windows'], ['mac', 'Mac'], ['linux', 'Linux']];
-  // installers only: .yml and .blockmap files are fetched by the desktop auto-updater, not by people
-  const platformOf = (name) => (/\.apk$/i.test(name) ? 'android'
-    : /\.ipa$/i.test(name) ? 'ios'
-    : /\.exe$/i.test(name) ? 'windows'
-    : /\.dmg$|mac.*\.zip$/i.test(name) ? 'mac'
-    : /\.AppImage$|\.deb$|\.rpm$|\.pacman$|linux.*\.tar\.gz$/i.test(name) ? 'linux' : null);
+  const BLANK = { android: 0, ios: 0, windows: 0, mac: 0, linux: 0 };
 
-  function countDownloads(releases) {
-    const per = { android: 0, ios: 0, windows: 0, mac: 0, linux: 0 };
-    const first = releases.find((r) => r.tag_name === FIRST_RELEASE);
-    const firstAt = first ? Date.parse(first.published_at || first.created_at || 0) : 0;
-    for (const rel of releases) {
-      const rolling = ROLLING[rel.tag_name];
-      if (rolling) {
-        const m = /aurora-downloads-before:\s*(\d+)/.exec(rel.body || '');
-        const asset = rel.assets.find((a) => a.name === rolling.file);
-        per[rolling.platform] += (m ? Number(m[1]) : rolling.seed) + (asset ? asset.download_count : 0);
-        continue;
-      }
-      // the 1.3 beta line predates the first official release and must not add to the public total
-      if (firstAt && Date.parse(rel.published_at || rel.created_at || 0) < firstAt) continue;
-      for (const a of rel.assets) {
-        const p = platformOf(a.name);
-        if (p && !ROLLING_PLATFORMS.has(p)) per[p] += a.download_count;
-      }
+  async function fetchCounts() {
+    const res = await fetch(`${CLOUD.url}/rest/v1/rpc/get_download_counts`, {
+      method: 'POST',
+      headers: {
+        apikey: CLOUD.anonKey,
+        Authorization: `Bearer ${CLOUD.anonKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: '{}',
+      cache: 'no-store',
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    const per = { ...BLANK };
+    for (const row of await res.json()) {
+      if (row.platform in per) per[row.platform] = Number(row.downloads) || 0;
     }
     return per;
+  }
+
+  function recordDownload(platform) {
+    return fetch(`${CLOUD.url}/rest/v1/rpc/record_download`, {
+      method: 'POST',
+      headers: {
+        apikey: CLOUD.anonKey,
+        Authorization: `Bearer ${CLOUD.anonKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ p_platform: platform }),
+      keepalive: true,
+    });
   }
 
   const fmt = (n) => n.toLocaleString('en-US');
@@ -161,8 +163,6 @@
     const cardCounts = { android: per.android, ios: per.ios, windows: per.windows, desktop: per.mac + per.linux };
     document.querySelectorAll('[data-count]').forEach((el) => {
       const n = cardCounts[el.dataset.count];
-      if (!el.dataset.fallback) el.dataset.fallback = el.textContent;
-      // the first official release starts at zero instead of showing the old beta totals
       el.textContent = `${fmt(n)} downloads`;
     });
   }
@@ -182,7 +182,7 @@
     size('android-latest', 'Aurora.apk', 'size-android');
     size('windows-latest', 'Aurora.exe', 'size-windows');
     size('ios-latest', 'Aurora.ipa', 'size-ios');
-    const newest = Object.keys(ROLLING).map((t) => byTag[t] && byTag[t].published_at).filter(Boolean).sort().pop();
+    const newest = ['android-latest', 'ios-latest', 'windows-latest'].map((t) => byTag[t] && byTag[t].published_at).filter(Boolean).sort().pop();
     if (newest) $('build-info').textContent = `Free · newest build ${ago(newest)}`;
 
     // desktop installers come from the newest versioned release (v1.2.3), not the rolling ones
@@ -203,40 +203,73 @@
   }
 
   // ---- live updates ----
-  const cached = store.get('aurora_site_counts_v2');
+  const cached = store.get(COUNTS_KEY);
   if (cached && cached.per) render(cached.per);
   let lastFetch = 0;
   let timer = 0;
+  let soon = 0;
+  let detailsAt = 0;
+  const refreshSoon = () => { clearTimeout(soon); soon = setTimeout(refresh, 1500); };
+
+  async function refreshDetails() {
+    // don't retry GitHub every minute when it is rate-limiting this visitor
+    detailsAt = Date.now();
+    try {
+      const res = await fetch(`${API}/releases?per_page=100`, { headers: { Accept: 'application/vnd.github+json' } });
+      if (res.ok) details(await res.json());
+    } catch (e) {}
+  }
+
   async function refresh() {
+    clearTimeout(soon);
     lastFetch = Date.now();
     try {
-      // the numbers the site publishes every 10 minutes (no per-visitor limit); GitHub's API only if that's missing
-      let releases = null;
-      try {
-        const s = await fetch(`stats.json?t=${Math.floor(Date.now() / 60000)}`, { cache: 'no-store' });
-        if (s.ok) { const j = await s.json(); if (j && Array.isArray(j.releases)) releases = j.releases; }
-      } catch (e) {}
-      if (!releases) {
-        const res = await fetch(`${API}/releases?per_page=100`, { headers: { Accept: 'application/vnd.github+json' } });
-        if (!res.ok) throw new Error(String(res.status));
-        releases = await res.json();
-      }
-      const per = countDownloads(releases);
+      const per = await fetchCounts();
       render(per);
-      details(releases);
-      store.set('aurora_site_counts_v2', { per, at: Date.now() });
-      $('live-text').textContent = 'Live from GitHub';
+      store.set(COUNTS_KEY, { per, at: Date.now() });
+      $('live-text').textContent = 'Live';
       document.querySelector('.pulse').classList.remove('off');
     } catch (e) {
-      // usually GitHub's hourly limit for this visitor; keep showing the last numbers
-      $('live-text').textContent = cached || odo.dataset.text ? 'Live updates paused for now' : 'Couldn’t reach GitHub';
+      // Supabase is down or blocked; keep the last numbers instead of showing a false zero
+      $('live-text').textContent = cached || odo.dataset.text ? 'Live updates paused for now' : 'Couldn’t reach the counter';
       document.querySelector('.pulse').classList.add('off');
       if (!odo.dataset.text) odo.innerHTML = '<span class="odo-wait">—</span>';
       if (!$('ranks').children.length) $('ranks').innerHTML = '<li class="wait">Couldn’t load the numbers right now.</li>';
     }
+    if (!detailsAt || Date.now() - detailsAt > DETAILS_MS) await refreshDetails();
     clearTimeout(timer);
     if (!document.hidden) timer = setTimeout(refresh, REFRESH_MS);
   }
+
+  // a download is counted when someone takes a build from this page
+  const lastHit = {};
+  document.querySelectorAll('[data-dl]').forEach((a) => a.addEventListener('click', () => {
+    const platform = a.dataset.dl;
+    if (!(platform in BLANK)) return;
+    const now = Date.now();
+    // a double click is still one download
+    if (lastHit[platform] && now - lastHit[platform] < 15000) return;
+    lastHit[platform] = now;
+    // move the number immediately, then settle on the server's total
+    const shown = store.get(COUNTS_KEY);
+    if (shown && shown.per) {
+      shown.per[platform] = (shown.per[platform] || 0) + 1;
+      render(shown.per);
+      store.set(COUNTS_KEY, { per: shown.per, at: Date.now() });
+    }
+    recordDownload(platform).then(async (res) => {
+      if (!res.ok) return;
+      // the function returns the new total, so the shown number is exact even if a refresh is slow
+      const total = Number(await res.text());
+      const current = store.get(COUNTS_KEY);
+      if (current && current.per && Number.isFinite(total)) {
+        current.per[platform] = total;
+        render(current.per);
+        store.set(COUNTS_KEY, { per: current.per, at: Date.now() });
+      }
+      refreshSoon();
+    }).catch(() => {});
+  }));
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { clearTimeout(timer); return; }
     if (Date.now() - lastFetch > REFRESH_MS) refresh();
