@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Download Aurora
+    url: https://bannedvariable.github.io/aurora/#download
+    about: Get the latest build for Windows, Android, iPhone, Mac or Linux.
+  - name: Website and FAQ
+    url: https://bannedvariable.github.io/aurora/#faq
+    about: Install steps, requirements and answers to the common questions.
+  - name: Why is the source private?
+    url: https://github.com/BannedVariable/BannedVariable.github.io#source-and-license
+    about: Aurora is free to use, not open source. This repository is the public site and release home.

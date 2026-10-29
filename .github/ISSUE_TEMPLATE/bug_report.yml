@@ -1,0 +1,62 @@
+name: Bug report
+description: Something in Aurora is broken or not working as expected.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Aurora better. This is the public issue tracker — the app's source code is private.
+
+        Please don't paste passwords, account tokens or private files. A screenshot or a short recording is often enough.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Where are you seeing this?
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iPhone / iPad
+        - The website or downloads
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Aurora version
+      description: "Settings → About, or the installer / APK name."
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the problem, including the exact steps that trigger it.
+      placeholder: "1. Open…\n2. Tap…\n3. Aurora…"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots, recording or logs
+      description: Drag files here. Remove anything private first.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the FAQ and searched existing issues.
+          required: true
+        - label: I removed passwords, tokens and private files from anything attached.
+          required: true

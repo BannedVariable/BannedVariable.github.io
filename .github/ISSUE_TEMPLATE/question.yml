@@ -1,0 +1,48 @@
+name: Question or help
+description: Ask for help with installing, signing in or using Aurora.
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The [FAQ](https://bannedvariable.github.io/aurora/#faq) covers the common install and sign-in questions. If your answer isn't there, ask here.
+
+        Never post passwords, account tokens or private files.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iPhone / iPad
+        - The website or downloads
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Aurora version
+      description: "Settings → About, or the installer / APK name."
+      placeholder: "1.0.0"
+    validations:
+      required: false
+  - type: textarea
+    id: question
+    attributes:
+      label: What do you need help with?
+      description: Include what you tried and any message you saw.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the FAQ and searched existing issues.
+          required: true
+        - label: I did not include passwords, tokens or private files.
+          required: true

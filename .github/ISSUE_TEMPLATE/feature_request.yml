@@ -1,0 +1,52 @@
+name: Feature request
+description: Suggest something Aurora should do better, or do at all.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Aurora 1.0 is out, and feature requests still shape what comes next. Please describe the problem before the solution — it makes the idea easier to evaluate.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: What are you trying to do, and where does Aurora get in the way today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+      description: Describe the feature or change. Mockups and examples are welcome.
+    validations:
+      required: true
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Which platforms should this apply to?
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iPhone / iPad
+        - The website
+        - All of them
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or workarounds
+      description: Anything you have tried, or another app that does this well.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this isn't already requested.
+          required: true
