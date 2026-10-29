@@ -3,5 +3,5 @@
   "ipa": "",
   "label": "Try with certificate",
   "sidestoreLabel": "Try in SideStore",
-  "note": "Signed with a third-party certificate. iOS may stop opening it if that certificate is revoked; for a lasting install, use SideStore or Sideloadly with your own Apple ID."
+  "note": "The direct install uses a third-party certificate, so iOS may stop opening it if that certificate is revoked. SideStore re-signs the same build with your own Apple ID and keeps it refreshed."
 }
