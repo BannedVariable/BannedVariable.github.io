@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=8">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -74,13 +74,46 @@
       </div>
     </div>
 
-    <!-- the counter -->
-    <section class="dark count" id="count" aria-labelledby="count-label" hidden>
-      <p class="eyebrow light reveal">Downloaded</p>
-      <div class="odo reveal" id="odo" aria-hidden="true"><span class="odo-wait">—</span></div>
+    <!-- the promo film -->
+    <section class="promo" id="promo" aria-labelledby="promo-h">
+      <div class="wrap">
+        <div class="promo-head">
+          <div>
+            <p class="eyebrow reveal">In motion</p>
+            <h2 class="h2 reveal" id="promo-h">Hear it.<br><span class="dim">Then see it.</span></h2>
+          </div>
+          <p class="promo-lede reveal">Twenty-four seconds inside Aurora: live lyrics, the island on your desktop, handoff to your phone, and the same library everywhere.</p>
+        </div>
+        <figure class="promo-frame reveal">
+          <video id="promo-video" class="promo-video" autoplay muted loop playsinline preload="metadata" poster="aurora-promo-poster.jpg">
+            <source src="aurora-promo.mp4" type="video/mp4">
+            <p>Your browser can't play this video. <a href="aurora-promo.mp4">Download it instead</a>.</p>
+          </video>
+          <button class="promo-sound" id="promo-sound" type="button" aria-pressed="false" aria-label="Turn promo sound on">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z"/><path class="wave" d="M16 9a4 4 0 0 1 0 6M18.8 6.4a7.5 7.5 0 0 1 0 11.2"/></svg>
+            <span>Sound on</span>
+          </button>
+          <figcaption class="sr">Aurora in twenty-four seconds: synced karaoke lyrics, the desktop island, device handoff, and the mobile app.</figcaption>
+        </figure>
+        <p class="fine promo-fine reveal">24 seconds &middot; made in Aurora</p>
+      </div>
+    </section>
+
+    <!-- the live counter: a small pill you can open for the platform split -->
+    <section class="live-stat reveal" id="count" aria-labelledby="count-label" hidden>
+      <button class="live-stat-btn" id="count-toggle" type="button" aria-expanded="false" aria-controls="count-panel" aria-label="Downloads and counting — show downloads by platform">
+        <span class="live-stat-dot" aria-hidden="true"><span class="pulse"></span></span>
+        <span class="odo" id="odo" aria-hidden="true"><span class="odo-wait">—</span></span>
+        <span class="live-stat-copy">
+          <span class="live-stat-label" id="count-label">downloads and counting</span>
+          <span class="live"><span id="live-text">Live</span></span>
+        </span>
+        <span class="live-stat-more" aria-hidden="true">By platform <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+      </button>
+      <div class="live-panel" id="count-panel" hidden>
+        <ol class="ranks" id="ranks" aria-label="Downloads per platform"></ol>
+      </div>
       <p class="sr" id="count-sr" aria-live="polite"></p>
-      <p class="count-label reveal" id="count-label"><span>times, and counting.</span> <span class="live"><span class="pulse" aria-hidden="true"></span><span id="live-text">Live</span></span></p>
-      <ol class="ranks reveal" id="ranks" aria-label="Downloads per platform"></ol>
     </section>
 
     <!-- features -->
@@ -347,6 +380,6 @@
     <symbol id="i-desktop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></g></symbol>
   </svg>
 
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>

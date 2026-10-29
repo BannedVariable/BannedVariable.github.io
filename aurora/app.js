@@ -203,6 +203,11 @@
     const ranked = PLATFORMS.filter(([k]) => per[k] > 0).sort((a, b) => per[b[0]] - per[a[0]]);
     const top = ranked.length ? per[ranked[0][0]] : 1;
     $('ranks').innerHTML = ranked.map(([k, label]) => `<li><span class="r-name">${label}</span><span class="r-n">${fmt(per[k])}</span><span class="r-bar"><i style="width:${Math.max(2, (per[k] / top) * 100)}%"></i></span></li>`).join('');
+    const toggle = $('count-toggle');
+    if (toggle) {
+      toggle.dataset.total = fmt(total);
+      toggle.setAttribute('aria-label', `${fmt(total)} downloads and counting — show downloads by platform`);
+    }
     const cardCounts = { android: per.android, ios: per.ios, windows: per.windows, desktop: per.mac + per.linux };
     document.querySelectorAll('[data-count]').forEach((el) => {
       const n = cardCounts[el.dataset.count];
@@ -484,6 +489,54 @@
     reveals.forEach((el) => io.observe(el));
   } else {
     reveals.forEach((el) => el.classList.add('in'));
+  }
+
+  // ---- the promo film: it loops silently until you ask for the sound ----
+  const promoVideo = $('promo-video');
+  const promoSound = $('promo-sound');
+  if (promoVideo && promoSound) {
+    const setSound = (on) => {
+      promoVideo.muted = !on;
+      promoSound.setAttribute('aria-pressed', String(on));
+      promoSound.setAttribute('aria-label', on ? 'Turn promo sound off' : 'Turn promo sound on');
+      promoSound.querySelector('span').textContent = on ? 'Sound off' : 'Sound on';
+    };
+    promoSound.addEventListener('click', () => {
+      const on = promoVideo.muted;
+      setSound(on);
+      if (on) {
+        // start the piece from the top so the soundtrack lands with the hook
+        try { promoVideo.currentTime = 0; } catch (e) {}
+        promoVideo.play().catch(() => {});
+      }
+    });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      promoVideo.pause();
+    } else if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) promoVideo.play().catch(() => {});
+        else promoVideo.pause();
+      }, { threshold: 0.25 }).observe(promoVideo);
+    }
+  }
+
+  // ---- the live counter opens into the platform split ----
+  const countToggle = $('count-toggle');
+  const countPanel = $('count-panel');
+  if (countToggle && countPanel) {
+    const setCountOpen = (open) => {
+      const total = countToggle.dataset.total;
+      countToggle.setAttribute('aria-expanded', String(open));
+      countToggle.setAttribute('aria-label', `${total ? `${total} ` : ''}downloads and counting — ${open ? 'hide' : 'show'} downloads by platform`);
+      countPanel.hidden = !open;
+    };
+    countToggle.addEventListener('click', () => setCountOpen(countToggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && countToggle.getAttribute('aria-expanded') === 'true') {
+        setCountOpen(false);
+        countToggle.focus();
+      }
+    });
   }
 
   document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => {
