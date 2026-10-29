@@ -1,6 +1,6 @@
 # Security policy
 
-Aurora is an independent project. I take reports seriously and will fix what I can as quickly as I can.
+Aurora is an independent project. Security reports are taken seriously and fixed as quickly as possible.
 
 ## Supported versions
 
@@ -20,7 +20,7 @@ Use [GitHub's private vulnerability reporting](https://github.com/BannedVariable
 - clear steps to reproduce, with a proof of concept if you have one
 - any relevant logs, with tokens, passwords and personal data removed
 
-You will get an acknowledgement as soon as I see it. I will confirm whether the report is in scope, keep you updated on the fix, and credit you in the advisory if you would like.
+You will get an acknowledgement as soon as the report is seen. The report will be confirmed as in scope, you will be kept updated on the fix, and you can be credited in the advisory if you would like.
 
 ## Scope
 
