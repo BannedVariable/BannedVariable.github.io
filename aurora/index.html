@@ -31,7 +31,6 @@
       </button>
       <div class="nav-links" id="nav-links">
         <a href="#features" data-sec="features">Features</a>
-        <a href="#inside" data-sec="inside">Inside</a>
         <a href="#download" data-sec="download">Download</a>
         <a href="#faq" data-sec="faq">FAQ</a>
       </div>
@@ -50,16 +49,10 @@
         <a class="btn" id="main-dl" href="#download"><span id="main-dl-label">Download Aurora</span></a>
       </div>
       <p class="fine reveal" id="build-info">Free · new builds every week</p>
-
-      <div class="hero-stage reveal" aria-hidden="true">
-        <div class="phone side left"><img src="shots/player.webp" alt="" width="393" height="852"></div>
-        <div class="phone main"><img src="shots/home.webp" alt="" width="393" height="852"></div>
-        <div class="phone side right"><img src="shots/foryou.webp" alt="" width="393" height="852"></div>
-      </div>
     </header>
 
     <!-- the counter -->
-    <section class="dark count" aria-labelledby="count-label">
+    <section class="dark count" id="count" aria-labelledby="count-label" hidden>
       <p class="eyebrow light reveal">Downloaded</p>
       <div class="odo reveal" id="odo" aria-hidden="true"><span class="odo-wait">—</span></div>
       <p class="sr" id="count-sr" aria-live="polite"></p>
@@ -80,7 +73,6 @@
               <h3>Lyrics you can sing.</h3>
               <p>Word-by-word karaoke, translations, a fullscreen sing-along mode, and an editor to write and sync your own.</p>
             </div>
-            <div class="tile-shot"><div class="phone small"><img src="shots/player.webp" alt="Now playing with synced lyrics" loading="lazy" width="393" height="852"></div></div>
           </article>
 
           <article class="tile reveal">
@@ -120,7 +112,7 @@
               <p>Controls on your lock screen, lyrics in the iPhone Dynamic Island, and play and pause in the Android notification.</p>
             </div>
             <div class="island" aria-hidden="true">
-              <div class="island-pill"><img src="shots/art-island.webp" alt="" width="40" height="40"><span><b>Boy's a liar Pt. 2</b><small>He doesn't see ya, you're not looking at me</small></span><i class="bars"><i></i><i></i><i></i></i></div>
+              <div class="island-pill"><span><b>Boy's a liar Pt. 2</b><small>He doesn't see ya, you're not looking at me</small></span><i class="bars"><i></i><i></i><i></i></i></div>
             </div>
           </article>
 
@@ -133,28 +125,8 @@
           <article class="tile wide black free reveal">
             <h3>Free.<br>Actually free.</h3>
             <p>No ads, no subscription. The account that keeps your library on every device is free too, and nobody earns money from it.</p>
-            <a class="more light" href="https://github.com/BannedVariable/aurora">See the source</a>
           </article>
         </div>
-      </div>
-    </section>
-
-    <!-- screenshots -->
-    <section class="dark inside" id="inside" aria-labelledby="inside-h">
-      <div class="wrap">
-        <p class="eyebrow light reveal">Inside</p>
-        <h2 class="h2 reveal" id="inside-h">Take a look around.</h2>
-      </div>
-      <div class="gallery" id="shelf" tabindex="0" aria-label="Screenshots">
-        <figure><div class="phone"><img src="shots/home.webp" alt="Home with Hot picks" loading="lazy" width="393" height="852"></div><figcaption><b>Home.</b> Hot picks and My Wave.</figcaption></figure>
-        <figure><div class="phone"><img src="shots/player.webp" alt="Now playing with lyrics" loading="lazy" width="393" height="852"></div><figcaption><b>Now playing.</b> Lyrics that follow along.</figcaption></figure>
-        <figure><div class="phone"><img src="shots/foryou.webp" alt="On repeat and Encore" loading="lazy" width="393" height="852"></div><figcaption><b>On repeat.</b> Encore and your top 3.</figcaption></figure>
-        <figure><div class="phone"><img src="shots/search.webp" alt="Search results" loading="lazy" width="393" height="852"></div><figcaption><b>Search.</b> Three sources at once.</figcaption></figure>
-        <figure><div class="phone"><img src="shots/queue.webp" alt="Up next queue" loading="lazy" width="393" height="852"></div><figcaption><b>Queue.</b> Drag to reorder.</figcaption></figure>
-      </div>
-      <div class="paddles">
-        <button type="button" class="paddle" data-scroll="-1" aria-label="Previous screenshots"><svg viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></svg></button>
-        <button type="button" class="paddle" data-scroll="1" aria-label="Next screenshots"><svg viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></svg></button>
       </div>
     </section>
 
@@ -163,7 +135,7 @@
       <div class="wrap narrow">
         <p class="eyebrow reveal">Download</p>
         <h2 class="h2 reveal" id="dl-h">Get Aurora.</h2>
-        <p class="lede small reveal">Always the newest build, straight from GitHub.</p>
+        <p class="lede small reveal">Always the newest build, for your phone or computer.</p>
 
         <div class="segmented reveal" role="tablist" aria-label="Platform">
           <button role="tab" id="tab-android" aria-controls="panel-android" aria-selected="false" data-os="android" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-android"/></svg>Android</button>
@@ -198,14 +170,14 @@
 
         <div class="card tabpanel" role="tabpanel" id="panel-desktop" aria-labelledby="tab-desktop" hidden>
           <div class="card-head"><h3>Mac &amp; Linux</h3><span class="n" data-count="desktop"></span></div>
-          <ol class="steps"><li>Pick your download below (<b id="rel-version">v1.1.5</b>).</li><li>Mac: if it's blocked, open <b>System Settings → Privacy &amp; Security → Open Anyway</b>.</li></ol>
+          <ol class="steps"><li>Pick your download below (<b id="rel-version">v1.3.8</b>).</li><li>Mac: if it's blocked, open <b>System Settings → Privacy &amp; Security → Open Anyway</b>.</li></ol>
           <div class="btns">
-            <a class="btn" id="dl-mac-arm" href="https://github.com/BannedVariable/aurora/releases/download/v1.1.5/Aurora-1.1.5-mac-arm64.dmg">Mac with Apple silicon</a>
-            <a class="btn outline" id="dl-mac-x64" href="https://github.com/BannedVariable/aurora/releases/download/v1.1.5/Aurora-1.1.5-mac-x64.dmg">Mac with Intel</a>
-            <a class="btn outline" id="dl-linux" href="https://github.com/BannedVariable/aurora/releases/download/v1.1.5/aurora-1.1.5-linux-x86_64.AppImage">Linux AppImage <small id="size-linux"></small></a>
+            <a class="btn" id="dl-mac-arm" href="https://github.com/BannedVariable/aurora/releases/download/v1.3.8/Aurora-1.3.8-mac-arm64.dmg">Mac with Apple silicon</a>
+            <a class="btn outline" id="dl-mac-x64" href="https://github.com/BannedVariable/aurora/releases/download/v1.3.8/Aurora-1.3.8-mac-x64.dmg">Mac with Intel</a>
+            <a class="btn outline" id="dl-linux" href="https://github.com/BannedVariable/aurora/releases/download/v1.3.8/aurora-1.3.8-linux-x86_64.AppImage">Linux AppImage <small id="size-linux"></small></a>
           </div>
           <p class="note">Linux in one line (needs FUSE 2, e.g. <code>fuse2</code> or <code>libfuse2</code>):</p>
-          <div class="copy"><code id="linux-line">mkdir -p ~/Applications && curl -L -o ~/Applications/Aurora.AppImage https://github.com/BannedVariable/aurora/releases/download/v1.1.5/aurora-1.1.5-linux-x86_64.AppImage && chmod +x ~/Applications/Aurora.AppImage && ~/Applications/Aurora.AppImage</code><button type="button" data-copy="linux-line">Copy</button></div>
+          <div class="copy"><code id="linux-line">mkdir -p ~/Applications && curl -L -o ~/Applications/Aurora.AppImage https://github.com/BannedVariable/aurora/releases/download/v1.3.8/aurora-1.3.8-linux-x86_64.AppImage && chmod +x ~/Applications/Aurora.AppImage && ~/Applications/Aurora.AppImage</code><button type="button" data-copy="linux-line">Copy</button></div>
         </div>
 
       </div>
@@ -218,8 +190,7 @@
         <div class="acc reveal">
           <details><summary>Is Aurora really free?</summary><p>Yes. No ads, no subscription. The account is free too: it keeps your playlists, favorites and settings on every phone and computer you sign in on.</p></details>
           <details><summary>Do I need an account?</summary><p>Yes, a free one. It is how Aurora knows which library is yours, so signing in on a second device brings your songs with you and both devices appear in the player, ready to hand playback over.</p></details>
-          <details><summary>Is Aurora connected to YouTube, SoundCloud or Spotify?</summary><p>No. Aurora is an independent, non-commercial player and hosts no music; it plays publicly available sources on your own device. Use it for private listening and only download music you have the right to. More in the <a href="https://github.com/BannedVariable/aurora/blob/main/LEGAL.md">legal notice</a>, which also says how rights holders can reach us.</p></details>
-          <details><summary>Where does the download counter come from?</summary><p>Straight from GitHub: it adds up every download of every Aurora file there and refreshes while this page is open. Downloads from before the counter existed are included where GitHub still had them.</p></details>
+          <details><summary>Is Aurora connected to YouTube, SoundCloud or Spotify?</summary><p>No. Aurora is an independent, non-commercial player and hosts no music; it plays publicly available sources on your own device. Use it for private listening and only download music you have the right to.</p></details>
           <details><summary>Why can't I just tap "install" on iPhone?</summary><p>iOS only runs apps signed with a certificate from Apple. Aurora doesn't use leaked certificates (those get revoked and can push anything to your phone), so on iPhone it installs through SideStore or Sideloadly with your own Apple ID.</p></details>
           <details><summary>Why does my iPhone app stop opening after 7 days?</summary><p>Apps signed with a free Apple ID expire after 7 days. SideStore refreshes them automatically on your phone; with Sideloadly, just install again.</p></details>
           <details><summary>Does music keep playing with the screen off?</summary><p>Yes, on iPhone and Android, with play, pause and skip on the lock screen.</p></details>
@@ -229,7 +200,6 @@
         <div class="about reveal">
           <img src="icon.png" alt="" width="56" height="56">
           <p>Aurora is a free music player made by cloverscripts. It's an independent, non-commercial project: it hosts no music and plays publicly available sources on your own device. Use it for private listening and only download music you have the right to.</p>
-          <p class="about-links"><a class="more" href="https://github.com/BannedVariable/aurora">Source on GitHub <b class="stars-n"></b></a><a class="more" href="https://github.com/BannedVariable/aurora/blob/main/LEGAL.md">Legal notice</a><a class="more" href="https://github.com/BannedVariable/aurora/issues/new?template=rights-holder-request.yml">Rights holders</a></p>
         </div>
       </div>
     </section>
@@ -240,7 +210,6 @@
       <p class="disclaimer">Aurora is an independent, non-commercial project and is not affiliated with, endorsed or sponsored by YouTube, Google, SoundCloud, Spotify or Apple. YouTube and YouTube Music are trademarks of Google LLC; SoundCloud, Spotify and Apple Music are trademarks of their owners and are named only to describe what Aurora works with. Aurora hosts no music.</p>
       <div class="foot-row">
         <span>Aurora by cloverscripts</span>
-        <span class="foot-links"><a href="https://github.com/BannedVariable/aurora/blob/main/LEGAL.md">Legal</a><a href="https://github.com/BannedVariable/aurora">Source</a></span>
       </div>
     </div>
   </footer>
