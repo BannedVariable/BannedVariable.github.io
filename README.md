@@ -73,20 +73,21 @@ The latest builds for every platform. The website has the full install guide, sc
 | **Windows** | [Aurora.exe](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/windows-latest/Aurora.exe) | x64 installer. If SmartScreen appears: **More info → Run anyway**. |
 | **Android** | [Aurora.apk](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/android-latest/Aurora.apk) | Signed APK. Allow installs from your browser when prompted. |
 | **iPhone / iPad** | [Install guide](https://bannedvariable.github.io/aurora/#download) · [IPA](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa) | SideStore or Sideloadly. Free signing lasts 7 days unless you use a paid developer account. |
-| **Mac** | [Apple silicon](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/Aurora-1.0.0-mac-arm64.dmg) · [Intel](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/Aurora-1.0.0-mac-x64.dmg) | Unsigned: run `xattr -cr /Applications/Aurora.app` once if macOS says it is damaged. |
-| **Linux** | [AppImage](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.0/aurora-1.0.0-linux-x86_64.AppImage) | `chmod +x` the file, then run it. Needs FUSE 2. |
+| **Mac** | [Apple silicon](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.1/Aurora-1.0.1-mac-arm64.dmg) · [Intel](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.1/Aurora-1.0.1-mac-x64.dmg) | Unsigned: run `xattr -cr /Applications/Aurora.app` once if macOS says it is damaged. |
+| **Linux** | [AppImage](https://github.com/BannedVariable/BannedVariable.github.io/releases/download/v1.0.1/aurora-1.0.1-linux-x86_64.AppImage) | `chmod +x` the file, then run it. Needs FUSE 2. |
 
 [All releases →](https://github.com/BannedVariable/BannedVariable.github.io/releases) · [Full install guide →](https://bannedvariable.github.io/aurora/#download)
 
-## New in 1.0.0
+## New in 1.0.1
 
-The first official release, built for every screen.
+Automatic Windows updates, a cleaner Aurora first run, and the same version on every screen.
 
+- **Windows updates itself** — 1.0.1 checks the release feed, downloads in the background, and offers Restart when the next build is ready.
 - **One library, five platforms** — iPhone, Android, Windows, macOS and Linux.
 - **Lyrics that follow the song** — word-by-word timing, translations and fullscreen karaoke.
 - **A desktop player that stays out of the way** — the island, handoff, EQ, effects and offline downloads.
 
-[Read the 1.0.0 release →](https://github.com/BannedVariable/BannedVariable.github.io/releases/tag/v1.0.0)
+[Read the 1.0.1 release →](https://github.com/BannedVariable/BannedVariable.github.io/releases/tag/v1.0.1)
 
 ## What this repository is
 

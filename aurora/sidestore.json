@@ -15,17 +15,17 @@
       "localizedDescription": "Free, ad-free music player. Stream from YouTube, YouTube Music and SoundCloud, synced lyrics, offline songs, playlists and recommendations. Independent and non-commercial, not affiliated with YouTube, SoundCloud or Spotify.",
       "versions": [
         {
-          "version": "1.0.0",
-          "buildVersion": "0",
-          "date": "2026-10-29T18:39:15.118Z",
-          "size": 11929712,
+          "version": "1.0.1",
+          "buildVersion": "1",
+          "date": "2026-10-30T03:21:37Z",
+          "size": 11931015,
           "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
           "minOSVersion": "16.2"
         }
       ],
-      "version": "1.0.0",
-      "versionDate": "2026-10-29T18:39:15.118Z",
-      "size": 11929712,
+      "version": "1.0.1",
+      "versionDate": "2026-10-30T03:21:37Z",
+      "size": 11931015,
       "downloadURL": "https://github.com/BannedVariable/BannedVariable.github.io/releases/download/ios-latest/Aurora.ipa",
       "appPermissions": {}
     }
